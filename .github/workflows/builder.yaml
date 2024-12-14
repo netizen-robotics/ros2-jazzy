@@ -40,6 +40,10 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          labels: |
+            org.opencontainers.image.title=Netizen Robotics ROS2 ${{ inputs.ros_distro }}
+            org.opencontainers.image.description=ROS2 base image used for Netizen Robotics projects
+            org.opencontainers.image.vendor=Netizen Robotics
       - name: Build and push
         id: push
         uses: docker/build-push-action@v5
