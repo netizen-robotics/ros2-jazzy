@@ -6,6 +6,9 @@ on:
       ros_distro:
         required: true
         type: string
+      platforms:
+        required: true
+        type: string
 
 permissions:
   contents: read
@@ -45,7 +48,7 @@ jobs:
           push: true
           build-args: |
             ROS2_DISTRO=${{ inputs.ros_distro }}
-          platforms: linux/amd64,linux/arm64
+          platforms: ${{ inputs.platforms }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha

@@ -5,8 +5,9 @@ on:
     types: [published]
 
 jobs:
-  release:
+  release-arm64:
     uses: ./.github/workflows/builder.yaml
     with:
       ros_distro: jazzy
+      platforms: linux/arm64
     secrets: inherit
