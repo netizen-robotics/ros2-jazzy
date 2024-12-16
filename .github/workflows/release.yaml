@@ -9,4 +9,5 @@ jobs:
     uses: ./.github/workflows/builder.yaml
     with:
       ros_distro: jazzy
+      environment: production
     secrets: inherit
