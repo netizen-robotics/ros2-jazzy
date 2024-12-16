@@ -19,7 +19,7 @@ RUN groupadd -g 1001 ros_users && \
   
 # Setup entrypoint
 COPY --chown=user:ros_users ./script/entrypoint.sh  /home/user/entrypoint.sh
-RUN chmod +x  /home/user/entrypoint.sh
+RUN chmod +x /home/user/entrypoint.sh
 
 # Switch to the custom user
 USER user
