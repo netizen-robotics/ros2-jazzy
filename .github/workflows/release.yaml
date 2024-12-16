@@ -5,7 +5,7 @@ on:
     types: [published]
 
 jobs:
-  release-arm64:
+  release:
     uses: ./.github/workflows/builder.yaml
     with:
       ros_distro: jazzy
