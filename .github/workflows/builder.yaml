@@ -6,9 +6,6 @@ on:
       ros_distro:
         required: true
         type: string
-      platforms:
-        required: true
-        type: string
 
 permissions:
   contents: read
@@ -16,8 +13,8 @@ permissions:
   packages: write
 
 env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: netizen-robotics-ros2-${{ inputs.ros_distro }}
+  REGISTRY: public.ecr.aws/y8l1o1z1
+  IMAGE_NAME: ros2-${{ inputs.ros_distro }}
 
 jobs:
   image-builder:
@@ -25,12 +22,15 @@ jobs:
     steps:
       - name: Git clone repository
         uses: actions/checkout@v4
-      - name: Log in to the Container registry
-        uses: docker/login-action@v3
+      - name: Configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v4
         with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          role-session-name: github-actions-session
+          aws-region: ap-east-1
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
       - name: Set up Docker Buildx
@@ -50,9 +50,10 @@ jobs:
         with:
           context: .
           push: true
+          no-cache: true
           build-args: |
             ROS2_DISTRO=${{ inputs.ros_distro }}
-          platforms: ${{ inputs.platforms }}
+          platforms: linux/arm64,linux/amd64
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
