@@ -13,18 +13,18 @@ RUN apt-get install ros-${ROS2_DISTRO}-navigation2 ros-${ROS2_DISTRO}-nav2-bring
 # Setup build tools and libraries
 RUN apt-get install python3-colcon-common-extensions -y
 
-# Create a custom user with UID 1234 and GID 1234
+# Create a custom user
 RUN groupadd -g 1001 ros_users && \
     useradd -m -u 8000 -g ros_users user
- 
-# Switch to the custom user
-USER user
- 
-# Set the workdir
-WORKDIR /home/user
-
+  
 # Setup entrypoint
 COPY --chown=user:ros_users ./script/entrypoint.sh  /home/user/entrypoint.sh
 RUN chmod +x  /home/user/entrypoint.sh
+
+# Switch to the custom user
+USER user
+
+# Set the workdir
+WORKDIR /home/user
 
 ENTRYPOINT ["/home/user/entrypoint.sh"]
